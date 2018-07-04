@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour {
     public GameObject plane;
     public Vector3 playerToMouse;
     public RaycastHit hit;
+    public float gunTimer = 2f;
+    public int bulletSpeed = 1000;
+
 
     Vector3 movement;
 
@@ -19,8 +22,6 @@ public class PlayerController : MonoBehaviour {
     // Component Variables
     Rigidbody rb;
 
-
-
 	// Use this for initialization
 	void Start () {
         Initialize();
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        gunTimer -= Time.deltaTime;
+
         // WASD MOVEMENT
         float vertical = Input.GetAxisRaw("Vertical");
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -61,17 +64,34 @@ public class PlayerController : MonoBehaviour {
                 print(gunHit.collider.tag);
                 if (gunHit.collider.tag == "NPC") 
                 {
-                    gunHit.collider.GetComponent<Rigidbody>().AddForce(playerToMouse * 10);
+                    gunHit.collider.GetComponent<Rigidbody>().AddForce(playerToMouse.normalized * 100);
                 }
             }
         }
 
+
+
+        if (Input.GetMouseButton(0)) {
+            print(Time.deltaTime);
+            if (gunTimer < 0) {
+                SpawnBullet();
+                gunTimer = .2f;
+            }
+        }
 
     }
 
     void Initialize()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    private void SpawnBullet() {
+        GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject();
+        bullet.transform.position = transform.Find("Gun").transform.position;
+        bullet.SetActive(true);
+        bullet.GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed * Time.deltaTime;
+        
     }
 
 
