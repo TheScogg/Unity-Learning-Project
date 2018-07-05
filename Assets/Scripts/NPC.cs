@@ -12,23 +12,34 @@ public class NPC : MonoBehaviour {
     Vector3 _destination;
 
     Attributes npc;
+    Renderer render;
 
     private class Attributes
     {
+        public int health = 5;
+        private float rating;
         private float _hSV;
 
         public Attributes()
         {
-            
+            this.rating = Rating;
         }
 
-        public int Rating { get; set; }
         public int Poo { get; set; }
         public float HSV { get; set; }
 
-        public int health = 5;
+        public float Rating
+        {
+            get
+            {
+                return rating;
+            }
 
-
+            set
+            {
+                rating = Random.Range(.7f, 1f);
+            }
+        }
     }
 
     // Use this for initialization
@@ -42,10 +53,17 @@ public class NPC : MonoBehaviour {
 
     private void Initialize() {
         SetAttributes();
-        GetComponent<Renderer>().material.SetColor("_Color", Color.HSVToRGB(Random.Range(.7f, 1f), 1f, 1f));
+        SetColor();
         InitWaypoints();
+
     }
 
+    private void SetColor() {
+        render = GetComponent<Renderer>();
+        Color color = Color.HSVToRGB(Random.Range(.7f, 1f), 1f, 1f);
+        render.material.SetColor("_Color", color);
+    }
+    
     private void SetAttributes() {
         npc = new Attributes();
         
@@ -81,6 +99,7 @@ public class NPC : MonoBehaviour {
 
     public void Hit()
     {
+        
         npc.health--;
         if (npc.health <= 0)
         {
