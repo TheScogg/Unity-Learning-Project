@@ -55,7 +55,6 @@ public class CameraController : MonoBehaviour {
         if (scrollAxis != 0) {
             interpolationPercent = Mathf.Clamp01(interpolationPercent + scrollAxis * Time.deltaTime * scrollSpeed);
             offset = (Utils.Lerp(startPos, endPos, interpolationPercent));
-            print("Start pos : " + startPos + " / EndPos: " + endPos + " / %: " + interpolationPercent);
             transform.rotation = Quaternion.Euler(Utils.Lerp(startRot, endRot, interpolationPercent));
         }
 

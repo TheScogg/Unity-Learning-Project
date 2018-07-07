@@ -23,10 +23,17 @@ public class Bullet : MonoBehaviour {
             objectHit.GetComponent<NPC>().Hit();
         }
 
+        // If bullet hits anything other than the Player or another bullet...
         if (objectHit.gameObject.name != "Body" || objectHit.gameObject.name.Contains("Bullet") ) {
-            //gameObject.SetActive(false);
             gameObject.SetActive(false);
 
+            for (int i = 0; i <= 10; i++)
+            {
+                GameObject bulletFragment = ObjectPooler.SharedInstance.GetPooledObject("ProjectileFragment");
+                bulletFragment.transform.position = transform.position;
+                bulletFragment.SetActive(true);
+                bulletFragment.GetComponent<Rigidbody>().velocity = new Vector3(Random.Range(-10.0f, 10.0f), 0, Random.Range(-10.0f, 10.0f));
+            }
         }
 
     }

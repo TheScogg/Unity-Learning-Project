@@ -72,7 +72,6 @@ public class PlayerController : MonoBehaviour {
 
 
         if (Input.GetMouseButton(0)) {
-            print(Time.deltaTime);
             if (gunTimer < 0) {
                 SpawnBullet();
                 gunTimer = .2f;
@@ -87,7 +86,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void SpawnBullet() {
-        GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject();
+        GameObject bullet = ObjectPooler.SharedInstance.GetPooledObject("Projectile");
         bullet.transform.position = transform.Find("Gun").transform.position;
         bullet.SetActive(true);
         bullet.GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed * Time.deltaTime;
