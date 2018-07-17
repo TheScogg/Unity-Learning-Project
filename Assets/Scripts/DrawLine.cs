@@ -7,6 +7,8 @@ public class DrawLine : MonoBehaviour
     LineRenderer lineRenderer;
     [SerializeField] GameObject player;
 
+    Vector3 hitPoint;
+
     // Use this for initialization
     void Start()
     {
@@ -27,8 +29,9 @@ public class DrawLine : MonoBehaviour
     void Update()
     {
         LineRenderer lineRenderer = GetComponent<LineRenderer>();
-
-        lineRenderer.SetPosition(0, player.transform.position);
-        lineRenderer.SetPosition(1, player.GetComponent<PlayerController>().hit.point);
+        hitPoint = player.GetComponent<PlayerController>().hit.point;
+        lineRenderer.SetPosition(0, player.transform.position + player.transform.forward);
+        lineRenderer.SetPosition(1, player.transform.position + (player.transform.forward * 5));
+        print(player.transform.forward);
     }
 }
