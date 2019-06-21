@@ -11,44 +11,40 @@ public class NPC : MonoBehaviour {
 
     Vector3 _destination;
 
+    Attributes npc;
+    Renderer render;
+
     private class Attributes
     {
+        public int health = 5;
+        private float rating;
         private float _hSV;
 
         public Attributes()
         {
-            
+            this.rating = Rating;
         }
 
-        public int Rating { get; set; }
         public int Poo { get; set; }
+        public float HSV { get; set; }
 
-
-        public float HSV
+        public float Rating
         {
             get
             {
-                
-                return HSV;
+                return rating;
             }
+
             set
             {
-                // 0 to 100 from .7 to 1
-                // (
-                // Color.HSVToRGB(Random.Range(.7f, 1f), 1f, 1f)d
-                HSV = value;
+                rating = Random.Range(.7f, 1f);
             }
         }
-
-
-
-
     }
 
     // Use this for initialization
     void Start () {
         Initialize();
-        
     }
 
     // Update is called once per frame
@@ -57,12 +53,19 @@ public class NPC : MonoBehaviour {
 
     private void Initialize() {
         SetAttributes();
-        GetComponent<Renderer>().material.SetColor("_Color", Color.HSVToRGB(Random.Range(.7f, 1f), 1f, 1f));
+        SetColor();
         InitWaypoints();
+
     }
 
+    private void SetColor() {
+        render = GetComponent<Renderer>();
+        Color color = Color.HSVToRGB(Random.Range(.7f, 1f), 1f, 1f);
+        render.material.SetColor("_Color", color);
+    }
+    
     private void SetAttributes() {
-        Attributes npc = new Attributes();
+        npc = new Attributes();
         
     }
 
@@ -94,7 +97,14 @@ public class NPC : MonoBehaviour {
         InitWaypoints();
     }
 
-    //public List<string> GetStats() {
-
-    //}
+    public void Hit()
+    {
+        
+        npc.health--;
+        if (npc.health <= 0)
+        {
+            
+            Destroy(gameObject);
+        }
+    }
 }
